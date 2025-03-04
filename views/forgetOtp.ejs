@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OTP Verification</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>OTP Verification</h1>
+    <form id="fotp-form" method="POST">
+      <input type="text" id="otp" name="otp" placeholder="Enter OTP" required style="padding: 10px; border-radius: 5px; border: 1px solid #444; background-color: #2a2a2a; color: white;">
+      <input type="hidden" id="email" name="email" value="<%= email ? email : '' %>">
+      <button type="submit" onclick="submitforgetOtp(event)">Verify OTP</button>
+    </form>
+  </div>
+  
+  <script src="/scripts/submitforgetOtp.js"> </script>
+</body>
+</html>

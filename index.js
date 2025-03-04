@@ -28,6 +28,7 @@ const {setUser} = require('./service/auth.js');
 const { restrictToLoggedinUserOnly } = require('./middlewares/auth.js');
 const { sendOTP, generateOTP } = require('./service/sendMail.js');
 const otpCache = {};
+const forgetOtpCache = {};
 
 app.get("/", restrictToLoggedinUserOnly, (req, res) => {
 const q = `SELECT * FROM products`;
@@ -135,7 +136,7 @@ app.get("/products", restrictToLoggedinUserOnly, (req, res) => {
                         regex.test(product.product_desc) ||
                         (product.categories && regex.test(product.categories))
                     );
-                } catch (error) {
+                    } catch (error) {
                     console.error("Invalid regex pattern:", error);
                     return res.status(400).send("Invalid search query");
                 }
@@ -436,9 +437,94 @@ app.post("/resendOtp", (req, res) => {
     return res.json({ success: true, message: "OTP resent successfully" });
 });
 
+app.get("/reset-email", (req, res) => {
+    res.render('emailForget', { message: "" });
+});
+
+app.post("/reset-email", (req, res) => {
+    const { email: rawEmail } = req.body;
+    const email = rawEmail.toLowerCase();
+    console.log(`Received email for password reset: ${email}`);
+  
+    const query = `SELECT * FROM railway.users WHERE userEmail = ?;`;
+    db.query(query, [email], (err, result) => {
+      if (err) {
+        console.error('Error checking email:', err);
+        return res.json({ success: false, message: "Error checking email" });
+      }
+      if (result.length > 0) {
+        // User exists, generate and send OTP for password reset
+        const otp = generateOTP();
+        forgetOtpCache[email] = otp;
+        console.log('Forget OTP Cache:', forgetOtpCache);
+        sendOTP(email, otp);  // Ensure your sendOTP function sends the email correctly
+        // Render the OTP verification page and pass the email to it
+        return res.render('forgetOtp', { email: email, message: "OTP sent successfully" });
+      } else {
+        return res.json({ success: false, message: "Email not registered" });
+      }
+    });
+  });
+  
+
+
+  app.post("/forgetPasswordVerify", (req, res) => {
+    const { email: rawEmail, otp } = req.body;
+    const email = rawEmail.toLowerCase();
+    console.log(`Received forget password OTP data: Email - ${email}, OTP - ${otp}`);
+    console.log("Forget OTP Cache: ", forgetOtpCache);
+  
+    if (forgetOtpCache[email] && forgetOtpCache[email] === otp) {
+      delete forgetOtpCache[email]; // Clear the OTP after verification
+      console.log("OTP verified successfully for password reset", email);
+      return res.json({ success: true, message: "OTP verified successfully! Please reset your password.", email });
+     
+    } else {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+  });
+  
+app.get("/reset-password", (req, res) => {
+    const { email } = req.query;
+    console.log(`Received data: Email - ${email}`);
+    res.render('forgotPassword', { email: email });
+});
+
+app.post("/reset-password", async (req, res) => {
+    const { email: rawEmail, upassword, cupassword } = req.body;
+    if (!rawEmail || !upassword || !cupassword) {
+        console.log("Missing fields:", { email: rawEmail, upassword, cupassword });
+        return res.status(400).json({ success: false, message: "All fields are required" });
+    }
+    const email = typeof rawEmail === 'string' ? rawEmail.toLowerCase() : '';
+    console.log(`Received data: Email - ${email}, Password - ${upassword}, Confirm Password - ${cupassword}`);
+    if (upassword !== cupassword) {
+        return res.status(400).json({ success: false, message: "*Passwords do not match", email });
+    } else {
+        try {
+            const hashedPassword = await bcrypt.hash(upassword, 8);
+            console.log('Hashed Password:', hashedPassword);
+            console.log('Email:', email);
+            const query = `UPDATE railway.users SET userPassword = ? WHERE userEmail = ?;`
+            db.query(query, [hashedPassword, email], (err, result) => {
+                if (err) {
+                    console.error('Error resetting password:', err);
+                    return res.status(500).json({ success: false, message: "Error resetting password" });
+                }
+                console.log('Password reset:', result);
+                return res.json({ success: true, message: "*Password reset successfully. Please login", email });
+            });
+        } catch (error) {
+            console.error('Error during password hash:', error);
+            return res.status(500).json({ success: false, message: "Error processing request" });
+        }
+    }
+});
 
 
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
 });
+
+

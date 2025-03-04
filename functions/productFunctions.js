@@ -26,12 +26,12 @@ const upload = multer({ storage: storage});
 function deleteProduct(product_id, callback) {
     console.log("product id: ", product_id);
     const query = `
-        DELETE FROM products p
-        WHERE p.product_id = ?
+        DELETE FROM products 
+        WHERE product_id = ?
     `;
     const quer2 = `
-        DELETE FROM product_images pi
-        WHERE pi.product_id = ?
+        DELETE FROM product_images 
+        WHERE product_id = ?
     `;
     const imageDirectory = path.join(__dirname, '../public/images');
     const imageQuery = `SELECT image_name FROM product_images WHERE product_id = ?`;
