@@ -89,7 +89,7 @@ app.get("/editform/:product_id", restrictToLoggedinUserOnly,(req, res) => {
 
 app.get("/products", restrictToLoggedinUserOnly, (req, res) => {
     const searchQuery = req.query.search || "";
-    const checkedCategories = req.query.categories ? req.query.categories : [];
+    let checkedCategories = req.query.categories ? req.query.categories : [];
 
     console.log(`Received data: Search - ${searchQuery}, Categories - ${checkedCategories}`);
 
@@ -144,7 +144,7 @@ filter(product =>
 
             // ✅ Apply Category Filtering AFTER regex filtering
             if (checkedCategories.length > 0) {
-                filteredProducts = filteredrailway.filter(product => {
+                filteredProducts = filteredProducts.filter(product => {
                     if (!product.categories) return false; // Skip products without categories
                     const productCategoryIds = product.categoriesId ? product.categoriesId.split(", ") : [];
                     return checkedCategories.some(catId => productCategoryIds.includes(catId));
