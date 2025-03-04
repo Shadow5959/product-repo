@@ -130,7 +130,8 @@ app.get("/products", restrictToLoggedinUserOnly, (req, res) => {
             if (searchQuery) {
                 try {
                     const regex = new RegExp(searchQuery, "i"); // Case-insensitive regex
-                    filteredProducts = products.filter(product =>
+                    filteredProducts = 
+filter(product =>
                         regex.test(product.product_name) ||
                         regex.test(product.product_desc) ||
                         (product.categories && regex.test(product.categories))
