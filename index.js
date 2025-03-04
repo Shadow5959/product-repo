@@ -29,7 +29,7 @@ const { restrictToLoggedinUserOnly } = require('./middlewares/auth.js');
 const { sendOTP, generateOTP } = require('./service/sendMail.js');
 const otpCache = {};
 
-app.get("/home", restrictToLoggedinUserOnly, (req, res) => {
+app.get("/", restrictToLoggedinUserOnly, (req, res) => {
 const q = `SELECT * FROM products`;
 const q2 = `SELECT * FROM products.category`
 db.query(q, (err, result) => {
