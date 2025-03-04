@@ -31,7 +31,7 @@ const otpCache = {};
 
 app.get("/", restrictToLoggedinUserOnly, (req, res) => {
 const q = `SELECT * FROM products`;
-const q2 = `SELECT * FROM products.category`
+const q2 = `SELECT * FROM railway.category`
 db.query(q, (err, result) => {
     if (err) {
         console.error('Error getting products:', err);
@@ -55,7 +55,7 @@ app.get("/editform/:product_id", restrictToLoggedinUserOnly,(req, res) => {
     const q2 = `SELECT pc.product_id, pc.cat_id, c.cat_name FROM productcategory pc 
     LEFT JOIN category c ON pc.cat_id = c.cat_id
     WHERE product_id = ?`;
-    const q3 = `SELECT * FROM products.category`;
+    const q3 = `SELECT * FROM railway.category`;
     db.query(q, [product_id], (err, result) => {
         if (err) {
             console.error('Error getting products:', err);
@@ -110,7 +110,7 @@ app.get("/products", restrictToLoggedinUserOnly, (req, res) => {
         ORDER BY p.product_id ASC
     `;
 
-    const categoryQuery = `SELECT * FROM products.category`;
+    const categoryQuery = `SELECT * FROM railway.category`;
 
     db.query(q, (err, products) => {
         if (err) {
@@ -144,7 +144,7 @@ filter(product =>
 
             // ✅ Apply Category Filtering AFTER regex filtering
             if (checkedCategories.length > 0) {
-                filteredProducts = filteredProducts.filter(product => {
+                filteredProducts = filteredrailway.filter(product => {
                     if (!product.categories) return false; // Skip products without categories
                     const productCategoryIds = product.categoriesId ? product.categoriesId.split(", ") : [];
                     return checkedCategories.some(catId => productCategoryIds.includes(catId));
@@ -237,7 +237,7 @@ app.post("/delete-image", (req, res) => {
 
 });
 app.get("/categoryList",restrictToLoggedinUserOnly, (req, res) => {
-    const q = `SELECT * FROM products.category`;
+    const q = `SELECT * FROM railway.category`;
     db.query(q, (err, result) => {
         if (err) {
             console.error('Error getting categories:', err);
@@ -283,7 +283,7 @@ app.get("/deletecategory/:cat_id",restrictToLoggedinUserOnly, (req, res) => {
 app.get("/editcat/:cat_id",restrictToLoggedinUserOnly, (req, res) => {
     const { cat_id } = req.params;
     console.log(`Received data: Category ID -${cat_id}`);
-    const q = `SELECT * FROM products.category WHERE cat_id = ?`;
+    const q = `SELECT * FROM railway.category WHERE cat_id = ?`;
     db.query(q, [cat_id], (err, result) => {
         if (err) {
             console.error('Error getting category:', err);
@@ -321,7 +321,7 @@ app.post("/register", (req, res) => {
     if (password !== cpassword) {
         return res.render('register', {message: "*Passwords do not match" });
     } else {
-        const equery = `SELECT userEmail FROM products.users WHERE userEmail = ?;`
+        const equery = `SELECT userEmail FROM railway.users WHERE userEmail = ?;`
         db.query(equery, [email], async (err, result) => {
             if (err) {
                 console.error('Error checking email:', err);
@@ -330,7 +330,7 @@ app.post("/register", (req, res) => {
             if (result.length > 0) {
                 return res.render('register', { message: "*Email already exists" });
             } else {
-                const query = `INSERT INTO products.users (userName, userEmail, userPassword) VALUES (?, ?, ?);`
+                const query = `INSERT INTO railway.users (userName, userEmail, userPassword) VALUES (?, ?, ?);`
                 let hashPassword = await bcrypt.hash(password, 8);
                 
                 db.query(query, [name, email, hashPassword], async (err, result) => {
@@ -357,7 +357,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     console.log(`Received data: Email - ${email}, Password - ${password}`);
-    const query = `SELECT * FROM products.users WHERE userEmail = ?;`
+    const query = `SELECT * FROM railway.users WHERE userEmail = ?;`
     db.query(query, [email], async (err, result) => {
         if (err) {
             console.error('Error logging in:', err);
@@ -401,7 +401,7 @@ app.post("/otpVerify", (req, res) => {
     if (otpCache[email] && otpCache[email] === otp) {
         delete otpCache[email];
         // Clear OTP after verification
-        const updateQuery = `UPDATE products.users SET userVerification = true WHERE userEmail = ?`;
+        const updateQuery = `UPDATE railway.users SET userVerification = true WHERE userEmail = ?`;
         db.query(updateQuery, [email], (err, result) => {
             if (err) {
             console.error('Error updating user verification:', err);
