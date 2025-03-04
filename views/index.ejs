@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Listing</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.tiny.cloud/1/mu7it1an7o566wgt37ouhcjmetjvvwi0iyh19achk7b8v351/tinymce/7/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>Product Listing</h1>
+    <div id="product-list"></div>
+    <h2>Add Product</h2>
+    <form id="product-form" method="POST" enctype="multipart/form-data">
+      <div style="width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; ">
+        <input
+          style="padding: 10px; border-radius: 5%; border: 1px solid #444; background-color: #2a2a2a; color: white;"
+          type="text" id="product-name" name="name" placeholder="Product Name" required>
+        <input
+          style="padding: 10px; border-radius: 5%; border: 1px solid #444; background-color: #2a2a2a; color: white;"
+          type="text" id="product-price" name="price" placeholder="Price" required>
+      </div>
+
+
+
+      <div>
+        <textarea id="product-description" name="description" placeholder="Description"></textarea>
+      </div>
+
+      <div class="container" style="height: 400px;">
+        <div class="select-btn ">
+          <span class="btn-text">Choose Category</span>
+            <span class="arrw-dwn">
+            <i class="fas fa-chevron-down" style="color: black;"></i>
+          </span>
+        </div>
+
+        <ul class="list-items" name="categories" id="categories">
+          <% categories.forEach(function(category) { %>
+            <li class="item" id="<%= category.cat_id %>">
+              <span class="checkbox">
+              <i class="fa-solid fa-check check-icon"></i></span>
+              <span class="item-text"><%= category.cat_name %></span>
+            </li>
+          <% }); %>
+        </ul>
+
+
+
+      </div>
+
+      <div
+        style="width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; margin-top: 10px;">
+        <input
+          style="padding: 10px; border-radius: 5%; border: 1px solid #444; background-color: #2a2a2a; color: white;"
+          type="file" id="productimage" name="images" accept="image/*" multiple onchange="uploadImages(event)">
+
+        <div
+          style="width: 90%;height:auto;display: flex;gap: 10px;margin-top: 10px;justify-content: space-around;align-items: baseline;flex-wrap: wrap;align-content: stretch;"
+          class="image-preview" id="imagePreview"></div>
+
+
+        <button style="width: 100%" type="submit" onclick="submitForm(event);window.location.href='/products'">Save
+          Product</button>
+        <button style="width: 100%; background-color: green;" onclick="window.location.href='/products'">Product
+          List</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/scripts/dropdown.js"></script>
+  <script src="/scripts/imageFunction.js"></script>
+  <script src="/scripts/submitFunction.js"></script>
+  <script src="/scripts/textEditor.js"></script>
+
+</body>
+
+</html>

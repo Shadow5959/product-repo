@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+  .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+  }
+  /* Ensure all product cards have the same minimum height */
+  .card {
+    border: 1px solid #333;
+    padding: 15px;
+    margin: 10px;
+    background-color: #222;
+    border-radius: 8px;
+    height: 500px;  /* Fixed minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 330px;
+  }
+  .card img {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+  }
+  .btn {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+    width: 95%;
+  }
+  .btn-success { background-color: #28a745; color: white; }
+  .btn-danger { background-color: #dc3545; color: white; }
+  .btn-primary { background-color: #007bff; color: white; }
+  .btn:hover { opacity: 0.8; }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    display:flex;
+  }
+  li {
+    margin-bottom: 20px;
+  }
+  .carousel-img {
+    width: 100%;
+    height: 300px; /* Fixed height for carousel images */
+    object-fit: contain;
+  }
+  .scrollable-description {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  /* Placeholder styling for missing images */
+  .no-image {
+    height: 300px;
+    width: 300px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+  }
+   /* Category Box Styling */
+   .categories-container {
+    margin: 10px 0;
+  }
+  .category-box {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    background-color: #444;
+    border-radius: 5px;
+    font-size: 0.9em;
+  }
+   

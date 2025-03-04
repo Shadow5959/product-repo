@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login Portal</h1>
+        <div>
+        <form id="loginform" action="/login" method="POST" >  
+      
+        <input type="text" id="email" name="email" placeholder="Email">
+        
+        <input type="password" id="password" name="password" placeholder="Password">
+        <button id="submit" type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="/register">Register</a></p>
+    </div>
+    <% if (message) { %>
+        <h4 class="message" style="color: darkred;" id="message"><%= message %></h4>
+        <script>
+            setTimeout(function() {
+                document.getElementById('message').style.display = 'none';
+            }, 3000); // Message will disappear after 5 seconds
+        </script>
+    <% } %>
+    </div>
+</body>
+</html>

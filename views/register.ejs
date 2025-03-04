@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+       <div>
+         <h2>Register</h2>
+        <form action="/register" method="POST">
+            <input type="text" id="name" name="name" placeholder="Full Name" required>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\W).{8,32}" title="Password must be between 8 to 32 characters, with at least one uppercase letter and one special character" required>
+            <input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" required>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+    <% if (message) { %>
+        <h4 class="message" style="color: darkred;" id="message"><%= message %></h4>
+        <script>
+            setTimeout(function() {
+                document.getElementById('message').style.display = 'none';
+            }, 3000); // Message will disappear after 5 seconds
+        </script>
+    <% } %>
+    </div>
+</body>
+</html>

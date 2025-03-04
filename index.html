@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Product Listing</h1>
+        <div id="product-list"></div>
+        <h2>Add Product</h2>
+         <form id="product-form" action="/home" method="POST">
+            <input type="text" id="product-name" name="name" placeholder="Product Name" required>
+            <input type="text" id="product-price" name="price" placeholder="Price" required>
+            <input type="text" id="product-description" name="description" placeholder="Description" required>
+            <input type="file" id="product-image" name="image" accept="image/*">
+            <button type="submit">Save Product</button>
+            <button onclick="window.location.href='/products'" style="background-color: green;">Product List</button>
+        </form>
+        
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
