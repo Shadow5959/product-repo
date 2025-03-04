@@ -2,7 +2,10 @@ const app = require('./server.js');
 const path = require('path');
 const db = require('./database.js');
 const dotenv = require('dotenv');
-dotenv.config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const domPurifier = require('dompurify');
 const { JSDOM } = require('jsdom');
 const htmlPurify = domPurifier(new JSDOM().window);

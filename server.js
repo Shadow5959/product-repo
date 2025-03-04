@@ -3,7 +3,10 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const app = express();
 const dotenv = require('dotenv');
-dotenv.config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const staticRoute = require('./routes/pages.js');
 const imageDirectory = path.join(__dirname, 'public/images');
 const cookieParser = require('cookie-parser');
